@@ -2,7 +2,7 @@ clc;
 clear all;
 close all;
 %%  read files 
-base_path='/home/owner1/Desktop/SR_Tutorials';
+base_path='/home/jagabandhu/data/Speaker_Recognition_Tutorials';
 train_path=strcat(base_path,'/','train_data');
 test_path=strcat(base_path,'/','test_data');
 %% read from wav files
