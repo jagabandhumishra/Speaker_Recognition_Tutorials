@@ -217,3 +217,142 @@ end
 %%
 [~,pred_spk]=max(cdis,[],2);
 acc=(length(find(pred_spk==spk_idx'))/(length(spk_idx))*100)
+
+%% LDA 
+n_top_dirct=4;
+dvlp_w=wt';
+
+a=cellstr(spks);
+b=1:5;
+seq_id=1:5;
+
+%==========================================================================
+% Within class covariance
+%==========================================================================
+[n,P]=size(dvlp_w);
+c=length(unique(seq_id));
+cls_strt_indx=1;
+
+S_w=0;
+data_mean=mean(dvlp_w,2);
+class_means=zeros(n,c);
+class_sizes=zeros(1,c);
+for i=1:c
+    cls_inds=find(seq_id==i);
+    class_data=dvlp_w(:,cls_inds);
+    class_sizes(i)=size(class_data,2);
+    S_w=S_w+cov(class_data',1)*class_sizes(i); 
+    class_means(:,i)=mean(class_data,2);
+end
+
+%==========================================================================
+% Between class covariance
+%==========================================================================
+S_b=0;
+for i=1:c
+    class_mean=class_means(:,i);
+    S_b=S_b+((class_mean-data_mean)*(class_mean-data_mean)'*class_sizes(i));
+end
+
+inv_S_w_S_b=inv(S_w)*S_b;
+[V, D]=eig(inv_S_w_S_b);
+
+
+
+V_top=V(:,1:n_top_dirct);
+lda_A=V_top;
+%% WCCN
+[n,P]=size(dvlp_w);
+c=length(unique(seq_id));
+cls_strt_indx=1;
+dvlp_w=lda_A'*dvlp_w;
+W=0;        
+class_means=zeros(n,c);
+class_sizes=zeros(1,c);
+for i=1:c
+    cls_inds=find(seq_id==i);
+    class_data=dvlp_w(:,cls_inds);
+    class_sizes(i)=size(class_data,2);
+    W=W+cov(class_data',1)*class_sizes(i);        
+end
+W=W/c;
+
+wccn_B=chol(inv(W),'lower');
+
+%% testing spk wise
+ll=1;
+true_scores=[];
+false_scores=[];
+wt=wt*lda_A;
+for i=1:length(tspks)
+    
+    file_path=strcat(test_path,'/',tspks(i,:));
+    
+    ddr=dir(file_path);
+    fl_nm=char(ddr.name);
+    fl_nm=fl_nm(3:end,:); % as one file has been taken for training
+    
+    
+    
+    for j=1:size(fl_nm,1)
+      
+        %% read test wav files
+     spk_idx(ll)=i;    
+     wav_path=strcat(file_path,'/',fl_nm(j,:)); 
+     [d,fs]=audioread(wav_path);
+     d=d-mean(d);
+     d=d./(1.01*(max(abs(d))));
+   
+    %% mfcc-feature extraction
+    [MFCC,DMFCC,DDMFCC]=mfcc_delta_deltadelta_rasta_v5(d,fs,14,24,20,10,1,1,2);
+    
+    mfcc=[MFCC(:,2:end), DMFCC(:,2:end),DDMFCC(:,2:end)]; %% Discard c0 co-effitient
+    [Ni, Fi] = collect_suf_stats(mfcc', ubm.m', ubm.v', w);
+    tst.N=Ni';
+    
+    tst.F=Fi';
+    
+    % we don't use the D matrix
+    d = zeros(1, size(tst.F, 2));
+
+
+    % initialize the factors
+    wtst      = zeros(1,nw);
+    tst.z   = zeros(1,size(tst.F,2));
+    junk    = zeros(1,1);
+
+
+    wtst = estimate_y_and_v(tst.F, tst.N, 0, m1, E1, d, T, 0, trn.z, w, junk, [1]);
+
+    
+    wtst=wtst*lda_A;
+    
+    
+    
+    
+    
+    for k=1:size(wt,1)
+    
+  
+    
+    
+    cdis(ll,k)=(wt(k,:)*wtst')/(norm(wt(k,:))*norm(wtst));
+    
+    if i==k
+        true_scores=[true_scores;cdis(ll,k)];
+    else
+       false_scores=[false_scores;cdis(ll,k)]; 
+    
+    end
+    
+    end
+     ll=ll+1;
+     disp(['testing for SPK ',num2str(tspks(i,:)),' having utt ',fl_nm(j,:),' is completed'])
+    end
+    
+end
+%%
+[~,pred_spk]=max(cdis,[],2);
+acc=(length(find(pred_spk==spk_idx'))/(length(spk_idx))*100)
+
+
