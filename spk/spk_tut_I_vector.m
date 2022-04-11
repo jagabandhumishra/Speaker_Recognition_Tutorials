@@ -2,7 +2,7 @@ clc;
 clear all;
 close all;
 %%
-datasetFolder='/home/jagabandhu/data/Speaker_Recognition_Tutorials/spk/data';
+datasetFolder='/home/iit/Downloads/SPEECH_DATA_ZIPPED';
 
 ads = audioDatastore([fullfile(datasetFolder,"SPEECH DATA","FEMALE","MIC"),fullfile(datasetFolder,"SPEECH DATA","MALE","MIC")], ...
                      IncludeSubfolders=true, ...

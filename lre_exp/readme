@@ -1,0 +1,11 @@
+Data preparation:
+
+1) rename the files with numbers (like lre-eng-0000.wav, use - instead of _), dont use abhabetical file name (like lre-aaaa.wav) it will create problem in sorting.
+(the matlab code for file renaming: data_rename.m, database structure required: language_label/filename.wav)
+2) use lre_exp.sh and lre_exp_test.sh to perform datapreparation for kaldi. (need to run 3 time lre_exp_test.sh for 3 sec, 10 sec and 10 sec by changing the datapath, in my case the name of test language label folder is different from train so I use sed command in line 9 of lre_exp_test.sh file, if your case it is same please comment the line.)
+3) After the data preparation is over you can run run.sh file.
+4) Follow the comments in run.sh file
+5) Data require: Muscan and rir (downloaded from https://openslr.org/17/, please give the proper folder location in run.sh) and language train data. all train data should be in 16 bit, else convert it using sox.
+6) Python3 is required.
+7) prepare the labels for final evaluation using lre_custom_test_list_generator.m file.
+8) from the exp/score folder you can get the result.
