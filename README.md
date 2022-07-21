@@ -25,6 +25,7 @@ Recordings: https://drive.google.com/file/d/1nWEyKSRpWyK8Y9JTr6Ey6wo58CSmUhUB/vi
 
 
 5) I-vector with GPLDA and TIMIT DATA(codes inside spk folder) (Download data from https://www2.spsc.tugraz.at/databases/PTDB-TUG/SPEECH_DATA_ZIPPED.zip),replace your /home/jagabandhu/matlab/toolbox/audio/audio/@audioFeatureExtractor with given @audioFeatureExtractor directory
+
 Recordings: https://drive.google.com/file/d/1nWEyKSRpWyK8Y9JTr6Ey6wo58CSmUhUB/view?usp=sharing
 
 6) X-vector based Spoken language Identification system (kaldi codes recepies inside lre_exp)
