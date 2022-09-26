@@ -14,7 +14,7 @@ https://drive.google.com/file/d/1KXQ5_IPRr882RzTFtUnaFHOQkTaP-eAG/view?usp=shari
 Recordings: https://drive.google.com/file/d/1qM_QRYBxTzrG5BFUXqrRYBE8wBVnlENQ/view?usp=sharing
 
 
-3) GMM-UBM based Speaker recognition system (MATLAB), details can be found at: https://drive.google.com/file/d/19TYGZbLGq2KCPg0fC23sR_RYrW-PdXFR/view?usp=sharing
+3) GMM-UBM based Speaker recognition system (MATLAB), details can be found at: https://drive.google.com/file/d/1rjeHTkTESQ3l8GfQuwqs6pZ6affM8Woy/view?usp=sharing
 
 Recordings: https://drive.google.com/file/d/1myiWhwHUAP1VGHW7wtA1wz1CCBu2huKt/view?usp=sharing
 
